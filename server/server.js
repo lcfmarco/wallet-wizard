@@ -24,8 +24,8 @@ const pool = new Pool({
 app.use(cors());
 
 
-app.get("/api/home", (req, res) => {
-  res.json({ message: "Welcome to Wallet Wizard Project" });
+app.get("/api/title", (req, res) => {
+  res.json({ title: "Welcome to Wallet Wizard Project" });
 });
 
 
@@ -34,7 +34,22 @@ app.get("/api/transaction", async (req, res) => {
   try {
     client = await pool.connect();
     console.log('Got a connection from the pool');
-    const resp = await client.query('SELECT t.*, c.name as category_name FROM transaction t JOIN category c ON t.category_id = c.id');
+    const resp = await client.query('SELECT t.*, c.name as category_name FROM transaction t JOIN category c ON t.category_id = c.id WHERE t.deleted_at is NULL');
+    res.json(resp.rows);
+  } catch (err) {
+    console.error(err);
+    res.json({error: err});
+  } finally {
+    client?.release();
+  }
+});
+
+app.get("/api/category", async (req, res) => {
+  let client
+  try {
+    client = await pool.connect();
+    console.log('Got a connection from the pool');
+    const resp = await client.query('SELECT c.id, c.name as category_name, c.created_at FROM category as c WHERE c.deleted_at is NULL');
     res.json(resp.rows);
   } catch (err) {
     console.error(err);
