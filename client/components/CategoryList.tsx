@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 function CategoryList() {
-  const [category, setCategory] = useState<any[]>([]);
+  const [category, setCategory] = useState<{ id: string; category_name: string; created_at: Date; }[] | string>("Loading...");
 
   useEffect(() => {
     fetch("http://localhost:3100/api/category")
