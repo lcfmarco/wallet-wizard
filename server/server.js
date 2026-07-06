@@ -24,8 +24,8 @@ const pool = new Pool({
 app.use(cors());
 
 
-app.get("/api/home", (req, res) => {
-  res.json({ message: "Welcome to Wallet Wizard Project" });
+app.get("/api/title", (req, res) => {
+  res.json({ title: "Welcome to Wallet Wizard Project" });
 });
 
 
@@ -43,7 +43,6 @@ app.get("/api/transaction", async (req, res) => {
     client?.release();
   }
 });
-
 
 app.get("/api/category", async (req, res) => {
   let client
