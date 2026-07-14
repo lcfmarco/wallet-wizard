@@ -13,12 +13,8 @@ const host = process.env.DB_HOST || "localhost";
 const isLocal = host === "localhost" || host === "127.0.0.1";
 
 const pool = new Pool({
-  user: process.env.DB_USER,
-  host,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT || 5432,
-  ssl: isLocal ? false : { rejectUnauthorized: false },
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DB_SSL === 'true' ? { rejectedUnauthorized: false } : false
 });
 
 app.use(cors());
