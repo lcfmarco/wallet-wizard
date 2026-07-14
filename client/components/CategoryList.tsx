@@ -12,7 +12,7 @@ function CategoryList() {
   }, []);
   return (
     <div>
-      <table border={1}>
+      <table className="data-table">
         <thead>
           <tr>
             <th>ID</th>

@@ -24,3 +24,33 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+/* Dashboard Styling */
+.dashboard {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.dashboard-section {
+  margin-top: 32px;
+}
+
+/* Data Table Styling */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.data-table th,
+.data-table td {
+  border: 1px solid #333;
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.data-table th {
+  font-weight: 700;
+}
