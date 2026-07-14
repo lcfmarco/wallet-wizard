@@ -1,15 +1,28 @@
 import React, { useEffect, useState } from 'react';
 
+type Category = {
+  id: string;
+  category_name: string;
+  created_at: Date;
+};
+
 function CategoryList() {
-  const [category, setCategory] = useState<{ id: string; category_name: string; created_at: Date; }[] | string>("Loading...");
+  const [category, setCategory] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/category`)
       .then((response) => response.json())
       .then((data) => {
         setCategory(data);
+        setLoading(false);
       });
   }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <div>
       <table className="data-table">
