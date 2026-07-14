@@ -15,7 +15,7 @@ function CategoryList() {
       <table className="data-table">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>#</th>
             <th>Category Name</th>
             <th>Created At</th>
           </tr>

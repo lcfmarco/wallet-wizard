@@ -15,7 +15,7 @@ function TransactionList() {
       <table className="data-table">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>#</th>
             <th>Transaction Name</th>
             <th>Category Name</th>
             <th>Date</th>
