@@ -34,7 +34,7 @@ function CategoryList() {
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(category) && category.map((item, index) => (
+          {category.map((item, index) => (
             <tr key={item.id}>
               <td>{index + 1}</td>
               <td>{item.category_name}</td>
