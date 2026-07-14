@@ -1,15 +1,31 @@
 import React, { useEffect, useState } from 'react';
 
+type Transaction = {
+  id: string;
+  name: string;
+  category_name: string;
+  date: Date;
+  amount: number;
+  created_at: Date;
+};
+
 function TransactionList() {
-  const [transaction, setTransaction] = useState<{ id: string; name: string; category_name: string; date: Date; amount: number; created_at: Date; }[] | string>("Loading...");
+  const [transaction, setTransaction] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/transaction`)
       .then((response) => response.json())
       .then((data) => {
         setTransaction(data);
+        setLoading(false);
       });
   }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  };
+
   return (
     <div>
       <table className="data-table">
@@ -24,7 +40,7 @@ function TransactionList() {
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(transaction) && transaction.map((item, index) => (
+          {transaction.map((item, index) => (
             <tr key={item.id}>
               <td>{index + 1}</td>
               <td>{item.name}</td>
