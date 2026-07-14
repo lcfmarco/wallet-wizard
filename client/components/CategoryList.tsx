@@ -4,7 +4,7 @@ function CategoryList() {
   const [category, setCategory] = useState<{ id: string; category_name: string; created_at: Date; }[] | string>("Loading...");
 
   useEffect(() => {
-    fetch("http://localhost:3100/api/category")
+    fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/category`)
       .then((response) => response.json())
       .then((data) => {
         setCategory(data);

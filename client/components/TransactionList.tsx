@@ -4,7 +4,7 @@ function TransactionList() {
   const [transaction, setTransaction] = useState<{ id: string; name: string; category_name: string; date: Date; amount: number; created_at: Date; }[] | string>("Loading...");
 
   useEffect(() => {
-    fetch("http://localhost:3100/api/transaction")
+    fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/transaction`)
       .then((response) => response.json())
       .then((data) => {
         setTransaction(data);
