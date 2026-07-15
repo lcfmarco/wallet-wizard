@@ -25,7 +25,7 @@ function CategorySelect({value, onChange}: {value: string, onChange: (e: React.C
   }
 
   return (
-    <select value={value} onChange={onChange} required>
+    <select id="category_id" name="category_id" value={value} onChange={onChange} required>
       <option value="">Select a Category</option>
       {category.map((item) => (
         <option key={item.id} value={item.id}>{item.category_name}</option>
