@@ -25,6 +25,7 @@ function CategoryList() {
 
   return (
     <div>
+      <h2>Categories</h2>
       <table className="data-table">
         <thead>
           <tr>
