@@ -88,7 +88,26 @@ app.put("/api/transaction/:id", async (req, res) => {
   }
 });
 
+app.delete("/api/transaction/:id", async (req, res) => {
+  let client;
+  const { id } = req.params;
 
+  try {
+    client = await pool.connect();
+    console.log(' Got a connection from the pool');
+    const resp = await client.query('UPDATE transaction SET deleted_at = NOW() WHERE id = $1;', [id]);
+    if (resp.rowCount === 0) {
+      res.status(404).json({ error: 'Transaction not found' });
+    }
+    res.json({ message: 'Transaction deleted successfully' });
+  } catch (err) {
+    res.json({ error: err });
+    console.log(err);
+  } finally {
+    client?.release();
+    console.log('Finally');
+  }
+});
 
 app.get("/api/category", async (req, res) => {
   let client

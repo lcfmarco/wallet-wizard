@@ -45,6 +45,18 @@ function Transaction({ id }: { id: string}) {
     router.replace("/");
   };
   
+  const handleDelete = async () => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_HOST}/api/transaction/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+    const data = await response.json();
+    console.log("Transaction deleted:", data);
+    router.replace("/");
+  }
+
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/transaction/${id}`)
       .then((response) => response.json())
@@ -143,16 +155,15 @@ function Transaction({ id }: { id: string}) {
         </div>
 
         <div className="form-actions">
-          <button 
-            type="submit"
-            >Save Transaction</button>
+          <button type="submit">
+            Save Transaction
+          </button>
 
-          <button type="button">Delete Transaction</button>
+          <button type="button" onClick={handleDelete}>
+            Delete Transaction
+          </button>
 
-          <button
-            type="button"
-            onClick={() => router.back()}
-          >
+          <button type="button" onClick={() => router.back()}>
             Cancel
           </button>
         </div>
