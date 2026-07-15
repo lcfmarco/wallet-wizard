@@ -123,7 +123,7 @@ app.delete("/api/transaction/:id", async (req, res) => {
 
   try {
     client = await pool.connect();
-    console.log(' Got a connection from the pool');
+    console.log('Got a connection from the pool');
     const resp = await client.query('UPDATE transaction SET deleted_at = NOW() WHERE id = $1;', [id]);
     if (resp.rowCount === 0) {
       res.status(404).json({ error: 'Transaction not found' });
@@ -150,6 +150,27 @@ app.get("/api/category", async (req, res) => {
     res.json({error: err});
   } finally {
     client?.release();
+  }
+});
+
+app.get("/api/category/:id", async (req, res) => {
+  let client;
+  const { id } = req.params;
+
+  try {
+    client = await pool.connect();
+    console.log('Got a connection from the pool');
+    const resp = await client.query('SELECT c.id, c.name as category_name, c.created_at FROM category as c WHERE c.deleted_at is NULL AND c.id = $1', [id]);
+    if (resp.rows.length === 0) {
+      res.status(404).json({ error: 'Category not found' });
+    } 
+    res.json(resp.rows[0]);
+  } catch (err) {
+    res.json({error: err});
+    console.log(err);
+  } finally {
+    client?.release();
+    console.log('Finally');
   }
 });
 
