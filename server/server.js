@@ -18,6 +18,7 @@ const pool = new Pool({
 });
 
 app.use(cors());
+app.use(express.json());
 
 
 app.get("/api/title", (req, res) => {
@@ -51,6 +52,32 @@ app.get("/api/transaction/:id", async (req, res) => {
     if (resp.rows.length === 0) {
       res.status(404).json({ error: 'Transaction not found' });
     } 
+    res.json(resp.rows[0]);
+  } catch (err) {
+    res.json({error: err});
+    console.log(err);
+  } finally {
+    client?.release();
+    console.log('Finally');
+  }
+});
+
+app.put("/api/transaction/:id", async (req, res) => {
+  let client;
+  const { id } = req.params;
+  const { name, amount, description, category_id, date } = req.body;
+
+  try {
+    client = await pool.connect();
+    console.log('Got a connection from the pool');
+    const resp = await client.query(
+      'UPDATE transaction SET name = $1, amount = $2, description = $3, category_id = $4, date = $5, updated_at = NOW() WHERE id = $6 RETURNING *',
+      [name, amount, description, category_id, date, id]
+    );
+
+    if (resp.rows.length === 0) {
+      res.status(404).json({ error: 'Transaction not found' });
+    }
     res.json(resp.rows[0]);
   } catch (err) {
     res.json({error: err});
