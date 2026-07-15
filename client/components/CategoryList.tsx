@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 type Category = {
@@ -9,7 +10,7 @@ type Category = {
 function CategoryList() {
   const [category, setCategory] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const router = useRouter();
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/category`)
       .then((response) => response.json())
@@ -36,7 +37,7 @@ function CategoryList() {
         </thead>
         <tbody>
           {category.map((item, index) => (
-            <tr key={item.id}>
+            <tr key={item.id} onClick={() => router.push(`/category/${item.id}`)}>
               <td>{index + 1}</td>
               <td>{item.category_name}</td>
               <td>{new Date(item.created_at).toLocaleDateString('en-US', { timeZoneName: 'short'})}</td>
