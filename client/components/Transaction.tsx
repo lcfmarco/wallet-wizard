@@ -27,6 +27,24 @@ function Transaction({ id }: { id: string}) {
   });
   const [loading, setLoading] = useState(true);
 
+  const handleSubmit = async ( e: React.SubmitEvent<HTMLFormElement> ) => {
+    e.preventDefault();
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_HOST}/api/transaction/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(transaction),
+      }
+    );
+    const data = await response.json();
+    console.log("Transaction updated:", data);
+    router.replace("/");
+  };
+  
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/transaction/${id}`)
       .then((response) => response.json())
@@ -42,22 +60,14 @@ function Transaction({ id }: { id: string}) {
     return <p>Loading...</p>;
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setTransaction({
-      ...transaction,
-      [name]: value,
-    });
-  };
-
   return (
   <div className="transaction-page">
     <div className="transaction-card">
       <h2>Edit Transaction</h2>
 
-      <form className="transaction-form">
+      <form 
+        className="transaction-form"
+        onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Transaction Name</label>
 
@@ -66,7 +76,9 @@ function Transaction({ id }: { id: string}) {
             name="name"
             type="text"
             value={transaction.name}
-            onChange={handleChange}
+            onChange={(e) =>
+              setTransaction((prev) => ({ ...prev, name: e.target.value }))
+            }
             required
           />
         </div>
@@ -76,7 +88,9 @@ function Transaction({ id }: { id: string}) {
 
           <CategorySelect
             value={transaction.category_id}
-            onChange={handleChange}
+            onChange={(e) =>
+              setTransaction((prev) => ({ ...prev, category_id: e.target.value }))
+            }
           />
         </div>
 
@@ -88,7 +102,11 @@ function Transaction({ id }: { id: string}) {
             name="description"
             type="text"
             value={transaction.description}
-            onChange={handleChange}
+            onChange={(e) =>
+              setTransaction((prev) => ({ ...prev, description: e.target.value
+
+              }))
+            }
           />
         </div>
 
@@ -100,7 +118,9 @@ function Transaction({ id }: { id: string}) {
             name="date"
             type="date"
             value={new Date(transaction.date).toISOString().split("T")[0]}
-            onChange={handleChange}
+            onChange={(e) =>
+              setTransaction((prev) => ({ ...prev, date: new Date(e.target.value) }))
+            }
             required
           />
         </div>
@@ -113,19 +133,21 @@ function Transaction({ id }: { id: string}) {
             name="amount"
             type="number"
             step="0.01"
-            value={transaction.amount / 100}
-            onChange={(e) =>
-              setTransaction({
-                ...transaction,
-                amount: Math.round(Number(e.target.value) * 100),
-              })
-            }
+            value={(transaction.amount / 100).toFixed(2)}
+            onChange={(e) => {
+              const value = parseFloat(e.target.value) * 100;
+              setTransaction((prev) => ({ ...prev, amount: value }));
+            }}
             required
           />
         </div>
 
         <div className="form-actions">
-          <button type="submit">Save Transaction</button>
+          <button 
+            type="submit"
+            >Save Transaction</button>
+
+          <button type="button">Delete Transaction</button>
 
           <button
             type="button"
