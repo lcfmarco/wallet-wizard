@@ -68,3 +68,139 @@ body {
 .data-table tbody tr:hover {
   background-color: #E0F2FE;
 }
+
+/* Transaction Page */
+.transaction-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 48px 24px;
+  background-color: #F8FAFC;
+}
+
+.transaction-card {
+  width: 100%;
+  max-width: 560px;
+  padding: 36px;
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+}
+
+.transaction-card h2 {
+  margin: 0 0 28px;
+
+  font-size: 28px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.transaction-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+  box-sizing: border-box;
+
+  width: 100%;
+  height: 46px;
+
+  padding: 10px 14px;
+
+  color: #0F172A;
+  background-color: #FFFFFF;
+
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+
+  font-size: 16px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.form-group input:hover,
+.form-group select:hover {
+  border-color: #94A3B8;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #2563EB;
+
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+
+  margin-top: 8px;
+  padding-top: 22px;
+
+  border-top: 1px solid #E2E8F0;
+}
+
+.form-actions button {
+  min-width: 110px;
+
+  padding: 11px 18px;
+
+  border: none;
+  border-radius: 8px;
+
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.1s ease;
+}
+
+
+.form-actions button:first-child {
+  color: #FFFFFF;
+  background-color: #2563EB;
+
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.22);
+}
+
+.form-actions button:first-child:hover {
+  background-color: #1D4ED8;
+}
+
+.form-actions button:first-child:active {
+  transform: translateY(1px);
+}
+
+.form-actions button:last-child {
+  color: #475569;
+  background-color: #F1F5F9;
+}
+
+.form-actions button:last-child:hover {
+  color: #1E293B;
+  background-color: #E2E8F0;
+}
