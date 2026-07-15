@@ -162,7 +162,7 @@ app.get("/api/category/:id", async (req, res) => {
     console.log('Got a connection from the pool');
     const resp = await client.query('SELECT c.id, c.name as category_name, c.created_at FROM category as c WHERE c.deleted_at is NULL AND c.id = $1', [id]);
     if (resp.rows.length === 0) {
-      res.status(404).json({ error: 'Category not found' });
+      return res.status(404).json({ error: 'Category not found' });
     } 
     res.json(resp.rows[0]);
   } catch (err) {
