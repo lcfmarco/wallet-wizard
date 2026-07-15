@@ -30,6 +30,8 @@ function TransactionList() {
 
   return (
     <div>
+      <h2>Transactions</h2>
+      <button onClick={() => router.push('/transaction/new')}>Add New</button>
       <table className="data-table">
         <thead>
           <tr>
