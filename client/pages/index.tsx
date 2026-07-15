@@ -9,12 +9,10 @@ function index() {
       <Title />
 
       <section className="dashboard-section">
-        <h2>Categories</h2>
         <CategoryList />
       </section>
       
       <section className="dashboard-section">
-        <h2>Transactions</h2>
         <TransactionList />
       </section>
       
