@@ -23,7 +23,7 @@ const TransactionForm = ({id}: {id?: string}) => {
 
   const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
-    fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/transaction`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/transaction/${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

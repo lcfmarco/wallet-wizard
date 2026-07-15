@@ -88,6 +88,26 @@ app.put("/api/transaction/:id", async (req, res) => {
   }
 });
 
+app.post("/api/transaction/:id", async (req, res) => {
+  let client;
+  const { id } = req.params;
+  console.log(req.body);
+  const { name, amount, description, category_id, date } = req.body;
+
+  try {
+    client = await pool.connect();
+    console.log('Got a connection from the pool');
+    const resp = await client.query('INSERT INTO transaction (id, name, amount, description, category_id, date, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW()) RETURNING *', [id, name, amount, description, category_id, date]);
+    res.json(resp.rows[0]);
+  } catch (err) {
+    res.json({error: err});
+    console.log(err);
+  } finally {
+    client?.release();
+    console.log('Finally');
+  }
+});
+
 app.delete("/api/transaction/:id", async (req, res) => {
   let client;
   const { id } = req.params;
