@@ -40,6 +40,29 @@ app.get("/api/transaction", async (req, res) => {
   }
 });
 
+app.get("/api/transaction/:id", async (req, res) => {
+  let client;
+  const { id } = req.params;
+
+  try {
+    client = await pool.connect();
+    console.log('Got a connection from the pool');
+    const resp = await client.query('SELECT t.*, c.name AS category_name FROM transaction t JOIN category c ON t.category_id = c.id WHERE t.deleted_at IS NULL AND t.id = $1', [id]);
+    if (resp.rows.length === 0) {
+      res.status(404).json({ error: 'Transaction not found' });
+    } 
+    res.json(resp.rows[0]);
+  } catch (err) {
+    res.json({error: err});
+    console.log(err);
+  } finally {
+    client?.release();
+    console.log('Finally');
+  }
+});
+
+
+
 app.get("/api/category", async (req, res) => {
   let client
   try {
