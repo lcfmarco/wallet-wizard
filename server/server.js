@@ -97,7 +97,16 @@ app.post("/api/transaction/:id", async (req, res) => {
   try {
     client = await pool.connect();
     console.log('Got a connection from the pool');
-    const resp = await client.query('INSERT INTO transaction (id, name, amount, description, category_id, date, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW()) RETURNING *', [id, name, amount, description, category_id, date]);
+    const resp = await client.query('INSERT INTO transaction (id, name, amount, description, category_id, date, created_at, updated_at) \
+      VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())\
+      ON CONFLICT (id) DO UPDATE SET \
+        name = EXCLUDED.name, \
+        amount = EXCLUDED.amount, \
+        description = EXCLUDED.description, \
+        category_id = EXCLUDED.category_id, \
+        date = EXCLUDED.date, \
+        updated_at = NOW() \
+      RETURNING *', [id, name, amount, description, category_id, date]);
     res.json(resp.rows[0]);
   } catch (err) {
     res.json({error: err});
