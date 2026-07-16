@@ -221,6 +221,25 @@ app.delete("/api/category/:id", async (req, res) => {
   }
 });
 
+app.post("/api/category/:id", async (req, res) => {
+  let client;
+  const { id } = req.params;
+  const { name } = req.body;
+
+  try {
+    client = await pool.connect();
+    console.log('Got a connection from the pool');
+    const resp = await client.query('INSERT INTO category (id, name, created_at, updated_at) VALUES ($1, $2, NOW(), NOW()) RETURNING *;', [id, name]);
+    res.json(resp.rows[0]);
+  } catch (err) {
+    res.json({error: err});
+    console.log(err);
+  } finally {
+    client?.release();
+    console.log('Finally');
+  }
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     });
