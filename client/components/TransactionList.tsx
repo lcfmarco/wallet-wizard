@@ -1,21 +1,41 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
+type Transaction = {
+  id: string;
+  name: string;
+  category_name: string;
+  date: Date;
+  amount: number;
+  created_at: Date;
+};
+
 function TransactionList() {
-  const [transaction, setTransaction] = useState<{ id: string; name: string; category_name: string; date: Date; amount: number; created_at: Date; }[] | string>("Loading...");
+  const router = useRouter();
+  const [transaction, setTransaction] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3100/api/transaction")
+    fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/transaction`)
       .then((response) => response.json())
       .then((data) => {
         setTransaction(data);
+        setLoading(false);
       });
   }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  };
+
   return (
     <div>
-      <table border={1}>
+      <h2>Transactions</h2>
+      <button onClick={() => router.push('/transaction/new')}>Add New</button>
+      <table className="data-table">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>#</th>
             <th>Transaction Name</th>
             <th>Category Name</th>
             <th>Date</th>
@@ -24,8 +44,8 @@ function TransactionList() {
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(transaction) && transaction.map((item, index) => (
-            <tr key={item.id}>
+          {transaction.map((item, index) => (
+            <tr key={item.id} onClick={() => router.push(`/transaction/${item.id}`)}>
               <td>{index + 1}</td>
               <td>{item.name}</td>
               <td>{item.category_name}</td>

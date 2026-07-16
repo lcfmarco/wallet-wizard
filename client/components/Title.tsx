@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
+type Title = {
+  title: string;
+};
+
 function Title() {
-  const [title, setTitle] = useState<{ title: string; }>({ title: "Loading..." });
+  const [title, setTitle] = useState<Title>({ title: "Loading..." });
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/title`)

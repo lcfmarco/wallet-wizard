@@ -13,15 +13,12 @@ const host = process.env.DB_HOST || "localhost";
 const isLocal = host === "localhost" || host === "127.0.0.1";
 
 const pool = new Pool({
-  user: process.env.DB_USER,
-  host,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT || 5432,
-  ssl: isLocal ? false : { rejectUnauthorized: false },
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DB_SSL === 'true' ? { rejectedUnauthorized: false } : false
 });
 
 app.use(cors());
+app.use(express.json());
 
 
 app.get("/api/title", (req, res) => {
@@ -44,6 +41,103 @@ app.get("/api/transaction", async (req, res) => {
   }
 });
 
+app.get("/api/transaction/:id", async (req, res) => {
+  let client;
+  const { id } = req.params;
+
+  try {
+    client = await pool.connect();
+    console.log('Got a connection from the pool');
+    const resp = await client.query('SELECT t.*, c.name AS category_name FROM transaction t JOIN category c ON t.category_id = c.id WHERE t.deleted_at IS NULL AND t.id = $1', [id]);
+    if (resp.rows.length === 0) {
+      res.status(404).json({ error: 'Transaction not found' });
+    } 
+    res.json(resp.rows[0]);
+  } catch (err) {
+    res.json({error: err});
+    console.log(err);
+  } finally {
+    client?.release();
+    console.log('Finally');
+  }
+});
+
+app.put("/api/transaction/:id", async (req, res) => {
+  let client;
+  const { id } = req.params;
+  const { name, amount, description, category_id, date } = req.body;
+
+  try {
+    client = await pool.connect();
+    console.log('Got a connection from the pool');
+    const resp = await client.query(
+      'UPDATE transaction SET name = $1, amount = $2, description = $3, category_id = $4, date = $5, updated_at = NOW() WHERE id = $6 RETURNING *',
+      [name, amount, description, category_id, date, id]
+    );
+
+    if (resp.rows.length === 0) {
+      res.status(404).json({ error: 'Transaction not found' });
+    }
+    res.json(resp.rows[0]);
+  } catch (err) {
+    res.json({error: err});
+    console.log(err);
+  } finally {
+    client?.release();
+    console.log('Finally');
+  }
+});
+
+app.post("/api/transaction/:id", async (req, res) => {
+  let client;
+  const { id } = req.params;
+  console.log(req.body);
+  const { name, amount, description, category_id, date } = req.body;
+
+  try {
+    client = await pool.connect();
+    console.log('Got a connection from the pool');
+    const resp = await client.query('INSERT INTO transaction (id, name, amount, description, category_id, date, created_at, updated_at) \
+      VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())\
+      ON CONFLICT (id) DO UPDATE SET \
+        name = EXCLUDED.name, \
+        amount = EXCLUDED.amount, \
+        description = EXCLUDED.description, \
+        category_id = EXCLUDED.category_id, \
+        date = EXCLUDED.date, \
+        updated_at = NOW() \
+      RETURNING *', [id, name, amount, description, category_id, date]);
+    res.json(resp.rows[0]);
+  } catch (err) {
+    res.json({error: err});
+    console.log(err);
+  } finally {
+    client?.release();
+    console.log('Finally');
+  }
+});
+
+app.delete("/api/transaction/:id", async (req, res) => {
+  let client;
+  const { id } = req.params;
+
+  try {
+    client = await pool.connect();
+    console.log('Got a connection from the pool');
+    const resp = await client.query('UPDATE transaction SET deleted_at = NOW() WHERE id = $1;', [id]);
+    if (resp.rowCount === 0) {
+      res.status(404).json({ error: 'Transaction not found' });
+    }
+    res.json({ message: 'Transaction deleted successfully' });
+  } catch (err) {
+    res.json({ error: err });
+    console.log(err);
+  } finally {
+    client?.release();
+    console.log('Finally');
+  }
+});
+
 app.get("/api/category", async (req, res) => {
   let client
   try {
@@ -56,6 +150,93 @@ app.get("/api/category", async (req, res) => {
     res.json({error: err});
   } finally {
     client?.release();
+  }
+});
+
+app.get("/api/category/:id", async (req, res) => {
+  let client;
+  const { id } = req.params;
+
+  try {
+    client = await pool.connect();
+    console.log('Got a connection from the pool');
+    const resp = await client.query('SELECT c.id, c.name, c.created_at FROM category as c WHERE c.deleted_at is NULL AND c.id = $1', [id]);
+    if (resp.rows.length === 0) {
+      return res.status(404).json({ error: 'Category not found' });
+    } 
+    res.json(resp.rows[0]);
+  } catch (err) {
+    res.json({error: err});
+    console.log(err);
+  } finally {
+    client?.release();
+    console.log('Finally');
+  }
+});
+
+app.put("/api/category/:id", async (req, res) => {
+  let client;
+  const { id } = req.params;
+  const { name } = req.body;
+
+  try {
+    client = await pool.connect();
+    console.log('Got a connection from the pool');
+    const resp = await client.query(
+      'UPDATE category SET name = $1, updated_at = NOW() WHERE id = $2 RETURNING *',
+      [name, id]
+    );
+    if (resp.rows.length === 0) {
+      return res.status(404).json({ error: 'Category not found' });
+    }
+    res.json(resp.rows[0]);
+  } catch (err) {
+    res.json({error: err});
+    console.log(err);
+  } finally {
+    client?.release();
+    console.log('Finally');
+  }
+});
+
+app.delete("/api/category/:id", async (req, res) => {
+  let client;
+  const { id } = req.params;
+
+  try {
+    client = await pool.connect();
+    console.log('Got a connection from the pool');
+    const resp = await client.query('UPDATE category SET deleted_at = NOW() WHERE id = $1;', [id]);
+
+    if (resp.rowCount === 0) {
+      return res.status(404).json({ error: 'Category not found' });
+    }
+    res.json({ message: 'Category deleted successfully' });
+  } catch (err) {
+    res.json({ error: err });
+    console.log(err);
+  } finally {
+    client?.release();
+    console.log('Finally');
+  }
+});
+
+app.post("/api/category/:id", async (req, res) => {
+  let client;
+  const { id } = req.params;
+  const { name } = req.body;
+
+  try {
+    client = await pool.connect();
+    console.log('Got a connection from the pool');
+    const resp = await client.query('INSERT INTO category (id, name, created_at, updated_at) VALUES ($1, $2, NOW(), NOW()) RETURNING *;', [id, name]);
+    res.json(resp.rows[0]);
+  } catch (err) {
+    res.json({error: err});
+    console.log(err);
+  } finally {
+    client?.release();
+    console.log('Finally');
   }
 });
 

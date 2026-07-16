@@ -5,10 +5,17 @@ import Title from '../components/Title';
 
 function index() {
   return (
-    <div>
+    <div className="dashboard-container">
       <Title />
-      <CategoryList />
-      <TransactionList />
+
+      <section className="dashboard-section">
+        <CategoryList />
+      </section>
+      
+      <section className="dashboard-section">
+        <TransactionList />
+      </section>
+      
     </div>
   )
 }

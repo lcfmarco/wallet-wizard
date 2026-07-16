@@ -1,28 +1,44 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
-function CategoryList() {
-  const [category, setCategory] = useState<{ id: string; category_name: string; created_at: Date; }[] | string>("Loading...");
+type Category = {
+  id: string;
+  category_name: string;
+  created_at: Date;
+};
 
+function CategoryList() {
+  const [category, setCategory] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
   useEffect(() => {
-    fetch("http://localhost:3100/api/category")
+    fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/category`)
       .then((response) => response.json())
       .then((data) => {
         setCategory(data);
+        setLoading(false);
       });
   }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <div>
-      <table border={1}>
+      <h2>Categories</h2>
+      <button onClick={() => router.push('/category/new')}>Add New</button>
+      <table className="data-table">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>#</th>
             <th>Category Name</th>
             <th>Created At</th>
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(category) && category.map((item, index) => (
-            <tr key={item.id}>
+          {category.map((item, index) => (
+            <tr key={item.id} onClick={() => router.push(`/category/${item.id}`)}>
               <td>{index + 1}</td>
               <td>{item.category_name}</td>
               <td>{new Date(item.created_at).toLocaleDateString('en-US', { timeZoneName: 'short'})}</td>
