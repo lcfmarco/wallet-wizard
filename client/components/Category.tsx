@@ -85,13 +85,22 @@ function Category({ id }: { id: string }) {
           </div>
 
           <div className="form-actions">
-            <button type="submit">
-              Save Category
+            <button type="submit">Save</button>
+
+            <button type="button" onClick={() => {
+              fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/category/${id}`, {
+                method: "DELETE",
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  console.log("Category deleted:", data);
+                  router.replace("/");
+                });
+            }}>
+              Delete
             </button>
 
-            <button type="button" onClick={() => router.back()}>
-              Cancel
-            </button>
+            <button type="button" onClick={() => router.back()}>Cancel</button>
           </div>
         </form>
       </div>

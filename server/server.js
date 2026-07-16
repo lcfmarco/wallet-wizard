@@ -199,7 +199,27 @@ app.put("/api/category/:id", async (req, res) => {
   }
 });
 
+app.delete("/api/category/:id", async (req, res) => {
+  let client;
+  const { id } = req.params;
 
+  try {
+    client = await pool.connect();
+    console.log('Got a connection from the pool');
+    const resp = await client.query('UPDATE category SET deleted_at = NOW() WHERE id = $1;', [id]);
+
+    if (resp.rowCount === 0) {
+      return res.status(404).json({ error: 'Category not found' });
+    }
+    res.json({ message: 'Category deleted successfully' });
+  } catch (err) {
+    res.json({ error: err });
+    console.log(err);
+  } finally {
+    client?.release();
+    console.log('Finally');
+  }
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
