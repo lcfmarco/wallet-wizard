@@ -27,6 +27,7 @@ function CategoryList() {
   return (
     <div>
       <h2>Categories</h2>
+      <button onClick={() => router.push('/category/new')}>Add New</button>
       <table className="data-table">
         <thead>
           <tr>
