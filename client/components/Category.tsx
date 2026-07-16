@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 
 type Category = {
   id: string;
-  category_name: string;
-  created_at: string;
+  name: string;
+  created_at: Date;
 };
 
 function Category({ id }: { id: string }) {
@@ -12,11 +12,29 @@ function Category({ id }: { id: string }) {
 
   const [category, setCategory] = useState<Category>({
     id: "",
-    category_name: "",
-    created_at: "",
+    name: "",
+    created_at: new Date(),
   });
 
   const [loading, setLoading] = useState(true);
+
+  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/category/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(category),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Category updated:", data);
+        setCategory(data);
+        router.replace("/");
+      });
+  };
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/category/${id}`)
@@ -37,27 +55,37 @@ function Category({ id }: { id: string }) {
       <div className="transaction-card">
         <h2>Edit Category</h2>
 
-        <form className="transaction-form">
+        <form className="transaction-form" onSubmit={handleSubmit}>
+
           <div className="form-group">
-            <label htmlFor="category_name">Category Name</label>
+            <label htmlFor="id">ID</label>
+            {category.id}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="name">Category Name</label>
 
             <input
-              id="category_name"
-              name="category_name"
+              id="name"
+              name="name"
               type="text"
-              value={category.category_name}
+              value={category.name}
               onChange={(e) =>
                 setCategory((prev) => ({
                   ...prev,
-                  category_name: e.target.value,
+                  name: e.target.value,
                 }))
               }
               required
             />
           </div>
+          <div className="form-group">
+            <label htmlFor="created_at">Created At</label>
+            {new Date(category.created_at).toLocaleString("en-US", { timeZoneName: "short" })}
+          </div>
 
           <div className="form-actions">
-            <button type="button">
+            <button type="submit">
               Save Category
             </button>
 

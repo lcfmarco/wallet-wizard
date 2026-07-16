@@ -160,7 +160,7 @@ app.get("/api/category/:id", async (req, res) => {
   try {
     client = await pool.connect();
     console.log('Got a connection from the pool');
-    const resp = await client.query('SELECT c.id, c.name as category_name, c.created_at FROM category as c WHERE c.deleted_at is NULL AND c.id = $1', [id]);
+    const resp = await client.query('SELECT c.id, c.name, c.created_at FROM category as c WHERE c.deleted_at is NULL AND c.id = $1', [id]);
     if (resp.rows.length === 0) {
       return res.status(404).json({ error: 'Category not found' });
     } 
@@ -173,6 +173,33 @@ app.get("/api/category/:id", async (req, res) => {
     console.log('Finally');
   }
 });
+
+app.put("/api/category/:id", async (req, res) => {
+  let client;
+  const { id } = req.params;
+  const { name } = req.body;
+
+  try {
+    client = await pool.connect();
+    console.log('Got a connection from the pool');
+    const resp = await client.query(
+      'UPDATE category SET name = $1, updated_at = NOW() WHERE id = $2 RETURNING *',
+      [name, id]
+    );
+    if (resp.rows.length === 0) {
+      return res.status(404).json({ error: 'Category not found' });
+    }
+    res.json(resp.rows[0]);
+  } catch (err) {
+    res.json({error: err});
+    console.log(err);
+  } finally {
+    client?.release();
+    console.log('Finally');
+  }
+});
+
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
