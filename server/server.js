@@ -20,18 +20,32 @@ const pool = new Pool({
 app.use(cors());
 app.use(express.json());
 
-
 app.get("/api/title", (req, res) => {
   res.json({ title: "Welcome to Wallet Wizard Project" });
 });
 
 
+// CRUD for Transactions
 app.get("/api/transaction", async (req, res) => {
   let client
+
+  const selectedMonth = Number(req.query.month);
+  const selectedYear = Number(req.query.year);
+
+  if (!Number.isInteger(selectedMonth) || !Number.isInteger(selectedYear) || selectedMonth < 1 || selectedMonth > 12) {
+    return res.status(400).json({
+      error: "A valid month and year are required"
+    });
+  }
+
   try {
     client = await pool.connect();
     console.log('Got a connection from the pool');
-    const resp = await client.query('SELECT t.*, c.name as category_name FROM transaction t JOIN category c ON t.category_id = c.id WHERE t.deleted_at is NULL');
+
+    const startDate = new Date(Date.UTC(selectedYear, selectedMonth - 1, 1));
+    const endDate = new Date(Date.UTC(selectedYear, selectedMonth, 1));
+
+    const resp = await client.query('SELECT t.*, c.name as category_name FROM transaction t JOIN category c ON t.category_id = c.id WHERE t.deleted_at is NULL AND t.date >= $1 AND t.date < $2 ORDER BY t.date DESC', [startDate, endDate]);
     res.json(resp.rows);
   } catch (err) {
     console.error(err);
@@ -138,6 +152,7 @@ app.delete("/api/transaction/:id", async (req, res) => {
   }
 });
 
+// CRUD for Categories
 app.get("/api/category", async (req, res) => {
   let client
   try {
