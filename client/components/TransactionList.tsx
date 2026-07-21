@@ -10,19 +10,27 @@ type Transaction = {
   created_at: Date;
 };
 
-function TransactionList() {
+function TransactionList({
+  month,
+  year,
+}: {
+  month: number;
+  year: number;
+}) {
   const router = useRouter();
   const [transaction, setTransaction] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/transaction`)
+    setLoading(true);
+
+    fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/transaction?month=${month}&year=${year}`)
       .then((response) => response.json())
       .then((data) => {
         setTransaction(data);
         setLoading(false);
       });
-  }, []);
+  }, [month, year]);
 
   if (loading) {
     return <p>Loading...</p>;
