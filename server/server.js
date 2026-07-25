@@ -255,6 +255,51 @@ app.post("/api/category/:id", async (req, res) => {
   }
 });
 
+// Dashboard
+
+app.get("/api/dashboard/monthly", async (req, res) => {
+  let client;
+
+  const selectedMonth = Number(req.query.month);
+  const selectedYear = Number(req.query.year);
+
+  if (!Number.isInteger(selectedMonth) || !Number.isInteger(selectedYear) || selectedMonth < 1 || selectedMonth > 12) {
+    return res.status(400).json({
+      error: "A valid month and year are required"
+    });
+  }
+
+  try {
+    client = await pool.connect();
+    console.log('Got a connection from the pool');
+
+    const startDate = new Date(Date.UTC(selectedYear, selectedMonth - 1, 1));
+    const endDate = new Date(Date.UTC(selectedYear, selectedMonth, 1));
+
+    const totalSpentResp = await client.query('SELECT COALESCE(SUM(t.amount), 0) as total_spent, COUNT(*) as transaction_count FROM transaction t WHERE t.deleted_at is NULL AND t.date >= $1 AND t.date < $2', [startDate, endDate]);
+    
+    const spendingSummary = totalSpentResp.rows[0];
+    res.json({
+      period: {
+        month: selectedMonth,
+        year: selectedYear,
+      },
+      summary: {
+        totalSpent: Number(spendingSummary.total_spent),
+        transactionCount: Number(spendingSummary.transaction_count),
+      },
+    });
+  }
+  catch (err) {
+    res.status(500).json({error: "Unable to retrieve monthly dashboard"});
+    console.log(err);
+  } finally {
+    client?.release()
+    console.log('Finally');
+  }
+});
+
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     });
