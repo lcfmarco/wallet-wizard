@@ -287,6 +287,7 @@ app.get("/api/dashboard/monthly", async (req, res) => {
       summary: {
         totalSpent: Number(spendingSummary.total_spent),
         transactionCount: Number(spendingSummary.transaction_count),
+        averageTransaction: Number(spendingSummary.transaction_count) > 0 ? Math.round(Number(spendingSummary.total_spent) / Number(spendingSummary.transaction_count)): 0,
       },
     });
   }
