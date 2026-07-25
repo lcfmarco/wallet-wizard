@@ -277,8 +277,14 @@ app.get("/api/dashboard/monthly", async (req, res) => {
     const endDate = new Date(Date.UTC(selectedYear, selectedMonth, 1));
 
     const totalSpentResp = await client.query('SELECT COALESCE(SUM(t.amount), 0) as total_spent, COUNT(*) as transaction_count FROM transaction t WHERE t.deleted_at is NULL AND t.date >= $1 AND t.date < $2', [startDate, endDate]);
-    
     const spendingSummary = totalSpentResp.rows[0];
+
+    const largestTransactionResp = await client.query('SELECT t.id, t.name, t.date, t.amount, t.description, c.name as category_name FROM transaction t JOIN category c ON t.category_id = c.id WHERE t.deleted_at is NULL AND t.date >= $1 AND t.date < $2 ORDER BY t.amount DESC, t.date DESC LIMIT 1', [startDate, endDate]);
+    const largestTransaction = largestTransactionResp.rows[0] ? {
+      ...largestTransactionResp.rows[0],
+      amount: Number(largestTransactionResp.rows[0].amount)
+    } : null;
+
     res.json({
       period: {
         month: selectedMonth,
@@ -288,6 +294,10 @@ app.get("/api/dashboard/monthly", async (req, res) => {
         totalSpent: Number(spendingSummary.total_spent),
         transactionCount: Number(spendingSummary.transaction_count),
         averageTransaction: Number(spendingSummary.transaction_count) > 0 ? Math.round(Number(spendingSummary.total_spent) / Number(spendingSummary.transaction_count)): 0,
+        largestTransaction: largestTransaction,
+        activeDays: null,
+        averageActiveDaySpending: null,
+        lastMonthSpending: null,
       },
     });
   }
