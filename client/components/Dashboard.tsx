@@ -53,6 +53,7 @@ function Dashboard({month, year}: {month: number, year: number}) {
   }
 
   const formatCurrency = (amount: number) => (amount / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+  const topCategory = dashboard.categorySummary.length > 0 ? dashboard.categorySummary[0] : null;
 
   return (
     <section className="dashboard">
@@ -79,23 +80,21 @@ function Dashboard({month, year}: {month: number, year: number}) {
 
       <div className="dashboard-card">
         <span className="dashboard-label">
-          Average Transaction
+          Top Category
         </span>
         <strong className="dashboard-value">
-          {formatCurrency(
-            dashboard.summary.averageTransaction
-          )}
+          {topCategory ? `${topCategory.categoryName}` : "N/A"}
         </strong>
       </div>
 
-      <div className="dashboard-card">
+      {/* <div className="dashboard-card">
         <span className="dashboard-label">
           Active Days
         </span>
         <strong className="dashboard-value">
           {dashboard.summary.activeDays}
         </strong>
-      </div>
+      </div> */}
 
 
       </div>
