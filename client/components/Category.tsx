@@ -94,7 +94,7 @@ function Category({ id }: { id: string }) {
                 .then((response) => response.json())
                 .then((data) => {
                   console.log("Category deleted:", data);
-                  router.replace("/");
+                  router.replace("/category");
                 });
             }}>
               Delete
