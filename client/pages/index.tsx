@@ -44,9 +44,6 @@ function index() {
       <section className="page-section">
         <div className="transaction-header">
           <h2>Transactions</h2>
-          <p>
-            {months.find((m) => m.value === month)?.label} {year}
-          </p>
         </div>
 
         <div className="transaction-controls">
