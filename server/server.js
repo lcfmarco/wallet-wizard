@@ -285,6 +285,8 @@ app.get("/api/dashboard/monthly", async (req, res) => {
       amount: Number(largestTransactionResp.rows[0].amount)
     } : null;
 
+
+
     res.json({
       period: {
         month: selectedMonth,
@@ -294,11 +296,11 @@ app.get("/api/dashboard/monthly", async (req, res) => {
         totalSpent: Number(spendingSummary.total_spent),
         transactionCount: Number(spendingSummary.transaction_count),
         averageTransaction: Number(spendingSummary.transaction_count) > 0 ? Math.round(Number(spendingSummary.total_spent) / Number(spendingSummary.transaction_count)): 0,
-        largestTransaction: largestTransaction,
         activeDays: null,
         averageActiveDaySpending: null,
         lastMonthSpending: null,
       },
+      largestTransaction: largestTransaction,
     });
   }
   catch (err) {
