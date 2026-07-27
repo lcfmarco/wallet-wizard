@@ -3,6 +3,7 @@ import TransactionList from '../components/TransactionList';
 import CategoryList from '../components/CategoryList';
 import Title from '../components/Title';
 import Dashboard from '../components/Dashboard';
+import Header from '../components/Header';
 
 const months = [
   {value: 1, label: 'January'},
@@ -31,15 +32,16 @@ function index() {
 
   return (
     <div className="page-container">
-      <Title />
+      <Header />
+      {/* <Title /> */}
 
       <section className="page-section">
         <Dashboard month={month} year={year} />
       </section>
 
-      <section className="page-section">
+      {/* <section className="page-section">
         <CategoryList />
-      </section>
+      </section> */}
       
       <section className="page-section">
         <div className="transaction-filter">
@@ -52,8 +54,6 @@ function index() {
                 </option>
               ))}
             </select>
-          </div>
-          <div>
             <label htmlFor="year">Year:</label>
             <select id="year" value={year} onChange={(e) => setYear(Number(e.target.value))}>
               {years.map((y) => (
