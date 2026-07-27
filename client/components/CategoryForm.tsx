@@ -40,7 +40,10 @@ const CategoryForm = ({id}:{id:string}) => {
         <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
       </div>
 
-      <button type="submit">Add Category</button>
+      <div className="form-actions">
+        <button type="submit">Add Category</button>
+        <button type="button" onClick={() => router.push('/')}>Cancel</button>
+      </div>
     </form>
   )
 };

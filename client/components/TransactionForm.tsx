@@ -65,7 +65,10 @@ const TransactionForm = ({id}: {id?: string}) => {
         <CategorySelect value={formData.category_id} onChange={handleChange} />
       </div>
 
-      <button type="submit">Submit</button>
+      <div className="form-actions">
+        <button type="submit">Submit</button>
+        <button type="button" onClick={() => router.push('/')}>Cancel</button>
+      </div>
     </form>
   )
 };
