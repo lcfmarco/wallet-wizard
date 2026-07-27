@@ -25,29 +25,32 @@ function CategoryList() {
   }
 
   return (
-    
-    
-    <div className="table-card">
-      <h2>Categories</h2>
-      <button onClick={() => router.push('/category/new')}>Add Category</button>
-      <table className="data-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Category Name</th>
-            <th>Created At</th>
-          </tr>
-        </thead>
-        <tbody>
-          {category.map((item, index) => (
-            <tr key={item.id} onClick={() => router.push(`/category/${item.id}`)}>
-              <td>{index + 1}</td>
-              <td>{item.category_name}</td>
-              <td>{new Date(item.created_at).toLocaleDateString('en-US', { timeZoneName: 'short'})}</td>
+    <div className="category-page">
+      <div className="page-controls">
+        <h2>Categories</h2>
+        <button className="add-button" onClick={() => router.push('/category/new')}>Add Category</button>
+      </div>
+
+      <div className="table-card">
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Category Name</th>
+              <th>Created At</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {category.map((item, index) => (
+              <tr key={item.id} onClick={() => router.push(`/category/${item.id}`)}>
+                <td>{index + 1}</td>
+                <td>{item.category_name}</td>
+                <td>{new Date(item.created_at).toLocaleDateString('en-US', { timeZoneName: 'short'})}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }

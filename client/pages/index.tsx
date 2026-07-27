@@ -46,7 +46,7 @@ function index() {
           <h2>Transactions</h2>
         </div>
 
-        <div className="transaction-controls">
+        <div className="page-controls">
           <label htmlFor="month">Month:</label>
           <select id="month" value={month} onChange={(e) => setMonth(Number(e.target.value))}>
             {months.map((m) => (

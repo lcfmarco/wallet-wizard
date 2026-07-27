@@ -170,7 +170,7 @@ body {
   font-size: 20px;
 }
 
-.transaction-controls {
+.page-controls {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -178,7 +178,7 @@ body {
 
 }
 
-.transaction-controls select {
+.page-controls select {
   height: 42px;
   padding: 0 36px 0 12px;
   border: 1px solid #cbd5e1;
