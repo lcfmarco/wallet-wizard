@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import TransactionList from '../components/TransactionList';
 import CategoryList from '../components/CategoryList';
 import Title from '../components/Title';
+import Dashboard from '../components/Dashboard';
 
 const months = [
   {value: 1, label: 'January'},
@@ -31,6 +32,10 @@ function index() {
   return (
     <div className="dashboard-container">
       <Title />
+
+      <section className="dashboard-section">
+        <Dashboard month={month} year={year} />
+      </section>
 
       <section className="dashboard-section">
         <CategoryList />
