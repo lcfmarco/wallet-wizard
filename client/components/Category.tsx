@@ -32,7 +32,7 @@ function Category({ id }: { id: string }) {
       .then((data) => {
         console.log("Category updated:", data);
         setCategory(data);
-        router.replace("/");
+        router.replace("/category");
       });
   };
 

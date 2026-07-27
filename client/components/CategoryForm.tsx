@@ -28,7 +28,7 @@ const CategoryForm = ({id}:{id:string}) => {
     .then(response => response.json())
     .then((data) => {
       console.log(data);
-      router.push('/');
+      router.push('/category');
     });
     console.log('Form data submitted:', formData);
   };
