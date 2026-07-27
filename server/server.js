@@ -276,8 +276,8 @@ app.get("/api/dashboard/monthly", async (req, res) => {
     const startDate = new Date(Date.UTC(selectedYear, selectedMonth - 1, 1));
     const endDate = new Date(Date.UTC(selectedYear, selectedMonth, 1));
 
-    const totalSpentResp = await client.query('SELECT COALESCE(SUM(t.amount), 0) as total_spent, COUNT(*) as transaction_count FROM transaction t WHERE t.deleted_at is NULL AND t.date >= $1 AND t.date < $2', [startDate, endDate]);
-    const spendingSummary = totalSpentResp.rows[0];
+    const summaryResp = await client.query('SELECT COALESCE(SUM(t.amount), 0) as total_spent, COUNT(*) as transaction_count, COUNT(DISTINCT t.date::date) AS active_days FROM transaction t WHERE t.deleted_at is NULL AND t.date >= $1 AND t.date < $2', [startDate, endDate]);
+    const spendingSummary = summaryResp.rows[0];
 
     const largestTransactionResp = await client.query('SELECT t.id, t.name, t.date, t.amount, t.description, c.name as category_name FROM transaction t JOIN category c ON t.category_id = c.id WHERE t.deleted_at is NULL AND t.date >= $1 AND t.date < $2 ORDER BY t.amount DESC, t.date DESC LIMIT 1', [startDate, endDate]);
     const largestTransaction = largestTransactionResp.rows[0] ? {
@@ -285,7 +285,10 @@ app.get("/api/dashboard/monthly", async (req, res) => {
       amount: Number(largestTransactionResp.rows[0].amount)
     } : null;
 
-
+    const previousStartDate = new Date(Date.UTC(selectedYear, selectedMonth - 2, 1));
+    const previousEndDate = startDate;
+    const previousMonthResp = await client.query('SELECT COALESCE(SUM(t.amount), 0) as previous_month_spent FROM transaction t WHERE t.deleted_at is NULL AND t.date >= $1 AND t.date < $2', [previousStartDate, previousEndDate]);
+    const previousMonthSpending = previousMonthResp.rows[0].previous_month_spent
 
     res.json({
       period: {
@@ -296,11 +299,15 @@ app.get("/api/dashboard/monthly", async (req, res) => {
         totalSpent: Number(spendingSummary.total_spent),
         transactionCount: Number(spendingSummary.transaction_count),
         averageTransaction: Number(spendingSummary.transaction_count) > 0 ? Math.round(Number(spendingSummary.total_spent) / Number(spendingSummary.transaction_count)): 0,
-        activeDays: null,
-        averageActiveDaySpending: null,
-        lastMonthSpending: null,
+        activeDays: Number(spendingSummary.active_days),
+        averageActiveDaySpending: Number(spendingSummary.active_days) > 0 ? Math.round(Number(spendingSummary.total_spent) / Number(spendingSummary.active_days)) : 0,
       },
       largestTransaction: largestTransaction,
+      lastMonthSpending: {
+        totalSpent: Number(previousMonthSpending),
+        difference: Number(spendingSummary.total_spent) - Number(previousMonthSpending),
+        percentageChange: Number(previousMonthSpending) > 0 ? Math.round((Number(spendingSummary.total_spent) - Number(previousMonthSpending)) / Number(previousMonthSpending) * 1000) / 10 : null
+      }
     });
   }
   catch (err) {
