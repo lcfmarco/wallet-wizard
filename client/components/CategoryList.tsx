@@ -25,9 +25,11 @@ function CategoryList() {
   }
 
   return (
-    <div>
+    
+    
+    <div className="table-card">
       <h2>Categories</h2>
-      <button onClick={() => router.push('/category/new')}>Add New</button>
+      <button onClick={() => router.push('/category/new')}>Add Category</button>
       <table className="data-table">
         <thead>
           <tr>

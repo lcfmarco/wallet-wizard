@@ -37,7 +37,7 @@ function TransactionList({
   };
 
   return (
-    <div>
+    <div className="table-card">
       <table className="data-table">
         <thead>
           <tr>
