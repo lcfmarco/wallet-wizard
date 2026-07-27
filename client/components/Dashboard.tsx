@@ -64,42 +64,29 @@ function Dashboard({month, year}: {month: number, year: number}) {
       </div>
 
       <div className="dashboard-grid">
-      <div className="dashboard-card">
-        <span className="dashboard-label">Total Spent</span>
-        <strong className="dashboard-value">
-          {formatCurrency(dashboard.summary.totalSpent)}
-        </strong>
+        <div className="dashboard-card">
+          <span className="dashboard-label">Total Spent</span>
+          <strong className="dashboard-value">
+            {formatCurrency(dashboard.summary.totalSpent)}
+          </strong>
+        </div>
+
+        <div className="dashboard-card">
+          <span className="dashboard-label">Transactions</span>
+          <strong className="dashboard-value">
+            {dashboard.summary.transactionCount}
+          </strong>
+        </div>
+
+        <div className="dashboard-card">
+          <span className="dashboard-label">
+            Top Category
+          </span>
+          <strong className="dashboard-value">
+            {topCategory ? `${topCategory.categoryName}` : "N/A"}
+          </strong>
+        </div>
       </div>
-
-      <div className="dashboard-card">
-        <span className="dashboard-label">Transactions</span>
-        <strong className="dashboard-value">
-          {dashboard.summary.transactionCount}
-        </strong>
-      </div>
-
-      <div className="dashboard-card">
-        <span className="dashboard-label">
-          Top Category
-        </span>
-        <strong className="dashboard-value">
-          {topCategory ? `${topCategory.categoryName}` : "N/A"}
-        </strong>
-      </div>
-
-      {/* <div className="dashboard-card">
-        <span className="dashboard-label">
-          Active Days
-        </span>
-        <strong className="dashboard-value">
-          {dashboard.summary.activeDays}
-        </strong>
-      </div> */}
-
-
-      </div>
-
-      
     </section>
   );
 }
