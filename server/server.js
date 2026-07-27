@@ -21,7 +21,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/api/title", (req, res) => {
-  res.json({ title: "Welcome to Wallet Wizard Project" });
+  res.json({ title: "Wallet Wizard" });
 });
 
 
