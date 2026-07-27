@@ -52,13 +52,55 @@ function Dashboard({month, year}: {month: number, year: number}) {
     return <p>Loading dashboard...</p>;
   }
 
-  const formatCurrent = (amount: number) => (amount / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+  const formatCurrency = (amount: number) => (amount / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
   return (
-    <section>
-      <h2>Monthly Dashboard</h2>
-      <p>Total Spent: {formatCurrent(dashboard.summary.totalSpent)}</p>
-      <p>Transactions: {dashboard.summary.transactionCount}</p>
+    <section className="dashboard">
+      
+      <div className="dashboard-header">
+        <h2>Monthly Dashboard</h2>
+        <p>{month}/{year}</p>
+      </div>
+
+      <div className="dashboard-grid">
+      <div className="dashboard-card">
+        <span className="dashboard-label">Total Spent</span>
+        <strong className="dashboard-value">
+          {formatCurrency(dashboard.summary.totalSpent)}
+        </strong>
+      </div>
+
+      <div className="dashboard-card">
+        <span className="dashboard-label">Transactions</span>
+        <strong className="dashboard-value">
+          {dashboard.summary.transactionCount}
+        </strong>
+      </div>
+
+      <div className="dashboard-card">
+        <span className="dashboard-label">
+          Average Transaction
+        </span>
+        <strong className="dashboard-value">
+          {formatCurrency(
+            dashboard.summary.averageTransaction
+          )}
+        </strong>
+      </div>
+
+      <div className="dashboard-card">
+        <span className="dashboard-label">
+          Active Days
+        </span>
+        <strong className="dashboard-value">
+          {dashboard.summary.activeDays}
+        </strong>
+      </div>
+
+
+      </div>
+
+      
     </section>
   );
 }

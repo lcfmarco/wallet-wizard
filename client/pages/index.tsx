@@ -30,18 +30,18 @@ function index() {
   );
 
   return (
-    <div className="dashboard-container">
+    <div className="page-container">
       <Title />
 
-      <section className="dashboard-section">
+      <section className="page-section">
         <Dashboard month={month} year={year} />
       </section>
 
-      <section className="dashboard-section">
+      <section className="page-section">
         <CategoryList />
       </section>
       
-      <section className="dashboard-section">
+      <section className="page-section">
         <div className="transaction-filter">
           <div>
             <label htmlFor="month">Month:</label>
