@@ -39,11 +39,13 @@ body {
 
 .dashboard-header h2 {
   margin: 0;
+  font-size: 20px;
 }
 
 .dashboard-header p {
   margin: 0;
   color: #666;
+  font-size: 20px;
 }
 
 .dashboard-grid {
@@ -141,6 +143,58 @@ body {
   font-size: 28px;
   font-weight: 700;
   text-align: left;
+}
+
+.transaction-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 10px;
+}
+
+.transaction-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.transaction-header p {
+  margin: 4px 0 0;
+  color: #666;
+  font-size: 20px;
+}
+
+.transaction-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+
+}
+
+.transaction-controls select {
+  height: 42px;
+  padding: 0 36px 0 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.add-button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #2563eb;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background-color: #1d4ed8;
 }
 
 .transaction-form {
