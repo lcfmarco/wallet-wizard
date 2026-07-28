@@ -244,8 +244,22 @@ app.post("/api/category/:id", async (req, res) => {
   try {
     client = await pool.connect();
     console.log('Got a connection from the pool');
-    const resp = await client.query('INSERT INTO category (id, name, created_at, updated_at) VALUES ($1, $2, NOW(), NOW()) RETURNING *;', [id, name]);
-    res.json(resp.rows[0]);
+
+    const existingCategory = await client.query('SELECT id, deleted_at FROM category WHERE LOWER(name) = LOWER($1)', [name]);
+
+    if (existingCategory.rows.length > 0) {
+      const category = existingCategory.rows[0];
+
+      if (category.deleted_at === null) {
+        return res.status(400).json({ error: 'Category with this name already exists' });
+      }
+      
+      const restoredCategory = await client.query('UPDATE category SET deleted_at = NULL, updated_at = NOW() WHERE id = $1 RETURNING *', [category.id]);
+      return res.json(restoredCategory.rows[0]);
+    }
+
+    const newCategory = await client.query('INSERT INTO category (id, name, created_at, updated_at) VALUES ($1, $2, NOW(), NOW()) RETURNING *;', [id, name]);
+    res.json(newCategory.rows[0]);
   } catch (err) {
     res.json({error: err});
     console.log(err);
