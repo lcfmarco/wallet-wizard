@@ -127,6 +127,7 @@ body {
 
 /* Transaction Page */
 .transaction-page {
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -203,7 +204,7 @@ body {
   background-color: #1d4ed8;
 }
 
-.transaction-form {
+.fill-form {
   display: flex;
   flex-direction: column;
   gap: 22px;
