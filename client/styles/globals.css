@@ -174,9 +174,7 @@ body {
 .page-controls {
   display: flex;
   align-items: center;
-  gap: 12px;
   margin-bottom: 20px;
-
 }
 
 .page-controls select {
@@ -189,7 +187,14 @@ body {
   cursor: pointer;
 }
 
+.date-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .add-button {
+  margin-left: auto;
   padding: 10px 16px;
   border: none;
   border-radius: 8px;

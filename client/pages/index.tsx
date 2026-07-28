@@ -47,23 +47,25 @@ function index() {
         </div>
 
         <div className="page-controls">
-          <label htmlFor="month">Month:</label>
-          <select id="month" value={month} onChange={(e) => setMonth(Number(e.target.value))}>
-            {months.map((m) => (
-              <option key={m.value} value={m.value}>
-                {m.label}
-              </option>
-            ))}
-          </select>
-          
-          <label htmlFor="year">Year:</label>
-          <select id="year" value={year} onChange={(e) => setYear(Number(e.target.value))}>
-            {years.map((y) => (
-              <option key={y} value={y}>
-                {y}
-              </option>
-            ))}
-          </select>
+          <div className="date-controls">
+            <label htmlFor="month">Month:</label>
+            <select id="month" value={month} onChange={(e) => setMonth(Number(e.target.value))}>
+              {months.map((m) => (
+                <option key={m.value} value={m.value}>
+                  {m.label}
+                </option>
+              ))}
+            </select>
+            
+            <label htmlFor="year">Year:</label>
+            <select id="year" value={year} onChange={(e) => setYear(Number(e.target.value))}>
+              {years.map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
+          </div>
 
           <button className="add-button" onClick={() => router.push('/transaction/new')}>Add Transaction</button>
         </div>
