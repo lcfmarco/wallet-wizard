@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const PORT = 3100;
+const PORT = process.env.PORT || 3100;
 
 const path = require('path');
 const result = require('dotenv').config({ path: path.resolve(__dirname, '../server/.env.development') });
@@ -14,7 +14,7 @@ const isLocal = host === "localhost" || host === "127.0.0.1";
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DB_SSL === 'true' ? { rejectedUnauthorized: false } : false
+  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
 });
 
 app.use(cors());
