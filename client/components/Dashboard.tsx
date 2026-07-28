@@ -83,7 +83,7 @@ function Dashboard({month, year}: {month: number, year: number}) {
             Top Category
           </span>
           <strong className="dashboard-value">
-            {topCategory ? `${topCategory.categoryName}` : "N/A"}
+            {topCategory ? `${topCategory.categoryName}` : "No Spending"}
           </strong>
         </div>
       </div>
