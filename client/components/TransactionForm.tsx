@@ -39,7 +39,7 @@ const TransactionForm = ({id}: {id?: string}) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="transaction-form">
+    <form onSubmit={handleSubmit} className="fill-form">
       <div className="form-group">
         <label htmlFor="name">Transaction Name</label>
         <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />

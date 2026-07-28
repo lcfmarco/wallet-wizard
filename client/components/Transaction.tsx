@@ -78,7 +78,7 @@ function Transaction({ id }: { id: string}) {
       <h2>Edit Transaction</h2>
 
       <form 
-        className="transaction-form"
+        className="fill-form"
         onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Transaction Name</label>

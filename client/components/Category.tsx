@@ -55,7 +55,7 @@ function Category({ id }: { id: string }) {
       <div className="transaction-card">
         <h2>Edit Category</h2>
 
-        <form className="transaction-form" onSubmit={handleSubmit}>
+        <form className="fill-form" onSubmit={handleSubmit}>
 
           <div className="form-group">
             <label htmlFor="id">ID</label>
