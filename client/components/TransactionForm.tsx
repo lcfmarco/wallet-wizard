@@ -2,12 +2,21 @@ import React, { useState } from 'react';
 import CategorySelect from './CategorySelect';
 import { useRouter } from 'next/router';
 
+const getCurrentLocalDate = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+};
+
 const TransactionForm = ({id}: {id?: string}) => {
   const router = useRouter();
   const [ formData, setFormData] = useState({
     id,
     name: '',
-    date: '',
+    date: getCurrentLocalDate(),
     description: '',
     amount: '',
     category_id: '',
