@@ -5,23 +5,17 @@ import Header from "../components/Header";
 function AnalyticsPage() {
   const currentDate = new Date();
 
-  const [month, setMonth] = useState(
+  const [month] = useState(
     currentDate.getMonth() + 1
   );
 
-  const [year, setYear] = useState(
+  const [year] = useState(
     currentDate.getFullYear()
   );
 
   return (
     <main className="page-container">
       <Header />
-      <section className="page-header">
-        <div>
-          <h1>Analytics</h1>
-        </div>
-      </section>
-
       <Analytics month={month} year={year} />
     </main>
   );
