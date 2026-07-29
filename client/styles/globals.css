@@ -407,3 +407,259 @@ body {
 .header-action:active {
   transform: translateY(1px);
 }
+
+/* Analytics Styling */
+/* Analytics Page */
+.analytics-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 32px;
+}
+
+.dashboard-header p {
+  margin: 6px 0 0;
+  color: #64748b;
+}
+
+.analytics-highlights {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.analytics-panel {
+  padding: 24px;
+
+  background-color: #ffffff;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.analytics-panel h2 {
+  margin: 0;
+
+  color: #0f172a;
+  font-size: 20px;
+}
+
+.analytics-section-header {
+  margin-bottom: 20px;
+}
+
+.analytics-section-header p {
+  margin: 6px 0 0;
+
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Previous Month Comparison */
+.comparison-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.comparison-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  padding-right: 16px;
+
+  border-right: 1px solid #e2e8f0;
+}
+
+.comparison-item:last-child {
+  padding-right: 0;
+  border-right: none;
+}
+
+.comparison-item span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.comparison-item strong {
+  color: #0f172a;
+  font-size: 18px;
+}
+
+/* Activity and Largest Transaction */
+.analytics-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.analytics-stat-list {
+  margin: 18px 0 0;
+}
+
+.analytics-stat-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+
+  padding: 14px 0;
+
+  border-top: 1px solid #e2e8f0;
+}
+
+.analytics-stat-row:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.analytics-stat-row dt {
+  color: #64748b;
+}
+
+.analytics-stat-row dd {
+  margin: 0;
+
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.analytics-eyebrow {
+  display: block;
+  margin-bottom: 14px;
+
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.largest-transaction-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.largest-transaction-header h2 {
+  margin: 0;
+}
+
+.largest-transaction-header p {
+  margin: 6px 0 0;
+
+  color: #64748b;
+}
+
+.largest-transaction-amount {
+  color: #0f172a;
+  font-size: 22px;
+  white-space: nowrap;
+}
+
+.largest-transaction-date {
+  margin: 18px 0 0;
+
+  color: #64748b;
+  font-size: 14px;
+}
+
+.largest-transaction-description {
+  margin: 14px 0 0;
+  padding-top: 14px;
+
+  color: #475569;
+
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Category Ranking */
+.category-ranking-row {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  align-items: center;
+  gap: 14px;
+
+  padding: 16px 0;
+
+  border-top: 1px solid #e2e8f0;
+}
+
+.category-ranking-row:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.category-rank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+
+  color: #2563eb;
+  background-color: #eff6ff;
+
+  border-radius: 50%;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.category-ranking-name,
+.category-ranking-value {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.category-ranking-name strong,
+.category-ranking-value strong {
+  color: #0f172a;
+}
+
+.category-ranking-name span,
+.category-ranking-value span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.category-ranking-value {
+  text-align: right;
+}
+
+/* Responsive Analytics */
+@media (max-width: 800px) {
+  .analytics-highlights,
+  .analytics-details {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .comparison-item {
+    padding: 12px 0;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+}
+
+@media (max-width: 520px) {
+  .comparison-list {
+    grid-template-columns: 1fr;
+  }
+
+  .largest-transaction-header {
+    flex-direction: column;
+  }
+}
+
