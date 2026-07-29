@@ -356,7 +356,7 @@ app.get("/api/analytics/monthly", async (req, res) => {
     const previousMonthResp = await client.query('SELECT COALESCE(SUM(t.amount), 0) as previous_month_spent FROM transaction t WHERE t.deleted_at is NULL AND t.date >= $1 AND t.date < $2', [previousStartDate, previousEndDate]);
     const previousMonthSpending = previousMonthResp.rows[0].previous_month_spent
 
-    const categorySummaryResp = await client.query('SELECT c.id as category_id, c.name as category_name, COUNT(t.id) as transaction_count, COALESCE(SUM(t.amount), 0) as total_spent FROM category c LEFT JOIN transaction t ON c.id = t.category_id AND t.deleted_at is NULL AND t.date >= $1 AND t.date < $2 WHERE c.deleted_at is NULL GROUP BY c.id, c.name ORDER BY total_spent DESC', [startDate, endDate]);
+    const categorySummaryResp = await client.query('SELECT c.id as category_id, c.name as category_name, COUNT(t.id) as transaction_count, COALESCE(SUM(t.amount), 0) as total_spent FROM category c JOIN transaction t ON c.id = t.category_id WHERE t.deleted_at is NULL AND t.deleted_at is NULL AND t.date >= $1 AND t.date < $2 GROUP BY c.id, c.name ORDER BY total_spent DESC', [startDate, endDate]);
     const categorySummary = categorySummaryResp.rows.map(row => ({
       categoryId: row.category_id,
       categoryName: row.category_name,
