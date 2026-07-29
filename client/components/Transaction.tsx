@@ -26,6 +26,7 @@ function Transaction({ id }: { id: string}) {
     created_at: new Date(),
   });
   const [loading, setLoading] = useState(true);
+  const [amountInput, setAmountInput] = useState("");
 
   const handleSubmit = async ( e: React.SubmitEvent<HTMLFormElement> ) => {
     e.preventDefault();
@@ -37,7 +38,10 @@ function Transaction({ id }: { id: string}) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(transaction),
+        body: JSON.stringify({
+          ...transaction,
+          amount: parseFloat(amountInput) * 100,
+        }),
       }
     );
     const data = await response.json();
@@ -63,6 +67,7 @@ function Transaction({ id }: { id: string}) {
       .then((data) => {
         console.log(data);
         setTransaction(data);
+        setAmountInput((data.amount / 100).toString());
         setLoading(false);
       });
   
@@ -145,12 +150,11 @@ function Transaction({ id }: { id: string}) {
             name="amount"
             type="number"
             step="0.01"
-            value={(transaction.amount / 100).toFixed(2)}
+            value={amountInput}
             onChange={(e) => {
-              const value = parseFloat(e.target.value) * 100;
-              setTransaction((prev) => ({ ...prev, amount: value }));
+              setAmountInput(e.target.value)
             }}
-            required
+          required
           />
         </div>
 
